@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'LambdaPractice_Second
+
+  Sample SAM Template for LambdaPractice_Second
+
+  '
+Globals:
+  Function:
+    Runtime: java11
+    MemorySize: 512
+    Timeout: 30
+Resources:
+  CreateOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreateOrderFunction
+      Handler: helloworld.CreateOrderLambda::createOrder
+      Events:
+        OrderEvents:
+          Type: Api
+          Properties:
+            Path: /orders
+            Method: POST
+  ReadOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ReadOrderFunction
+      Handler: helloworld.ReadOrders::handleRequest
+      Events:
+        OrderEvents:
+          Type: Api
+          Properties:
+            Path: /orders
+            Method: GET

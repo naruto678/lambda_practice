@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  LambdaPractice_Second
+
+  Sample SAM Template for LambdaPractice_Second
+Globals:
+  Function:
+    Runtime: java11
+    MemorySize: 512
+    Timeout : 30
+    Environment:
+      Variables:
+        ORDERS_TABLE: !Ref OrdersTable
+
+
+
+Resources:
+  CreateOrderFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: OrdersApi
+      Handler: helloworld.CreateOrderLambda::createOrder
+      Events:
+        OrderEvents:
+          Type: Api
+          Properties:
+           Path: /orders
+           Method: POST
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName:
+  ReadOrderFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: OrdersApi
+      Handler: helloworld.ReadOrders::handleRequest
+      Events:
+        OrderEvents:
+          Type: Api
+          Properties:
+            Path: /orders
+            Method: GET
+
+
+  OrdersTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: id
+      TableName: OrdersTable
+
